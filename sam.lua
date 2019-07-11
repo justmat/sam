@@ -31,6 +31,27 @@ local start_time = nil
 local sample_id = 1
 local current_position = 0
 
+local current_sample_number = 0
+
+
+local function read_sample_number()
+  -- reads sam/data/sample.number
+  local sample = io.open("/home/we/dust/code/sam/data/sample.number", "r")
+  io.input(sample)
+  current_sample_number = tonumber(io.read()) 
+  io.close(sample)
+  return current_sample_number
+end
+
+
+local function write_sample_number()
+  -- writes current_sample_number to /sam/data/sample.number
+  local sample = io.open("/home/we/dust/code/sam/data/sample.number", "w+")
+  io.output(sample)
+  io.write(current_sample_number)
+  io.close(sample)
+end
+
 
 local function reset_loop()
   softcut.buffer_clear(1)
@@ -57,12 +78,14 @@ end
 
 function write_buffer()
   -- saves buffer as a mono file in /home/we/dust/audio/tape
-  sample_id = string.match(util.time(), "....$")
+  sample_id = string.format("%04d", read_sample_number() + 1)
   local loop_start = params:get("loop_start")
   local loop_end = params:get("loop_end")
   local file_path = "/home/we/dust/audio/tape/smpl." .. sample_id .. ".wav"
-
+  current_sample_number = sample_id
   softcut.buffer_write_mono(file_path, loop_start, loop_end, 1)
+  
+  write_sample_number()
 end
 
 
