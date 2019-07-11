@@ -23,12 +23,11 @@
 --
 -- v0.1 @justmat
 
+local alt = false
 local recording = false
 local playing = false
 local save_time = 2
-
 local start_time = nil
-local alt = false
 local sample_id = 1
 local current_position = 0
 
@@ -57,7 +56,7 @@ end
 
 
 function write_buffer()
-  -- saves L/R buffers as stereo files in /home/we/dust/audio/tape
+  -- saves buffer as a mono file in /home/we/dust/audio/tape
   sample_id = string.match(util.time(), "....$")
   local loop_start = params:get("loop_start")
   local loop_end = params:get("loop_end")
@@ -69,7 +68,6 @@ end
 
 local function update_positions(voice,position)
   current_position = position
-  --print(voice,position)
 end
 
 
@@ -199,5 +197,4 @@ function redraw()
   screen.text_center("saving smpl." .. sample_id .. ".wav")
   screen.update()
 end
-
     
