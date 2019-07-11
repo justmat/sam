@@ -122,10 +122,10 @@ function init()
   softcut.filter_dry(1, 1)
 
   -- sample start controls
-  params:add_control("loop_start", "loop start", controlspec.new(0.0, 59.99, "lin", .01, 0, "secs"))
+  params:add_control("loop_start", "loop start", controlspec.new(0.0, 349.99, "lin", .01, 0, "secs"))
   params:set_action("loop_start", function(x) set_loop_start(x) end)
   -- sample end controls
-  params:add_control("loop_end", "loop end", controlspec.new(.01, 60, "lin", .01, 60, "secs"))
+  params:add_control("loop_end", "loop end", controlspec.new(.01, 350, "lin", .01, 60, "secs"))
   params:set_action("loop_end", function(x) set_loop_end(x) end)
 
   -- screen metro
@@ -188,9 +188,9 @@ function enc(n, d)
   else
     -- coarse
     if n == 2 then
-      params:delta("loop_start", d * .1)
+      params:delta("loop_start", d)
     elseif n == 3 then
-      params:delta("loop_end", d * .1)
+      params:delta("loop_end", d)
     end
   end
 end
