@@ -2,7 +2,7 @@
 --      sam(ples)
 --  ________________________
 -- |  ____________________   |
--- | /                        \  |
+-- | /                         \ |
 -- | |    //\\       //\\   |  |
 -- | |    || () ||        || () ||   |  |
 -- | |    \\//       \\//   |  |
@@ -218,7 +218,9 @@ function redraw()
     screen.text_center("end : " .. string.format("%.2f", params:get("loop_end")))
   end
   screen.move(64, 52)
-  screen.level(util.time() - save_time <= 1.0 and 15 or 0)
-  screen.text_center("saving sam" .. current_sample_number .. ".wav")
+  --screen.level(util.time() - save_time <= 1.0 and 15 or 0)
+  if util.time() - save_time <= 1.0 then
+    screen.text_center("saving sam" .. current_sample_number .. ".wav")
+  end
   screen.update()
 end
