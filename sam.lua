@@ -28,7 +28,6 @@ local recording = false
 local playing = false
 local save_time = 2
 local start_time = nil
-local sample_id = 1
 local current_position = 0
 
 local current_sample_number = 0
@@ -81,7 +80,7 @@ end
 
 function write_buffer()
   -- saves buffer as a mono file in /home/we/dust/audio/tape
-  sample_id = string.format("%04d", read_sample_number() + 1)
+  local sample_id = string.format("%04d", read_sample_number() + 1)
   local loop_start = params:get("loop_start")
   local loop_end = params:get("loop_end")
   local file_path = "/home/we/dust/audio/tape/sam." .. sample_id .. ".wav"
@@ -220,6 +219,6 @@ function redraw()
   end
   screen.move(64, 52)
   screen.level(util.time() - save_time <= 1.0 and 15 or 0)
-  screen.text_center("saving sam." .. sample_id .. ".wav")
+  screen.text_center("saving sam." .. current_sample_number .. ".wav")
   screen.update()
 end
