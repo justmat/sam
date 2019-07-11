@@ -217,7 +217,7 @@ function redraw()
   end
   screen.move(64, 52)
   screen.level(util.time() - save_time <= 1.0 and 15 or 0)
-  screen.text_center("saving smpl." .. sample_id .. ".wav")
+  screen.text_center("saving sam." .. sample_id .. ".wav")
   screen.update()
 end
     
