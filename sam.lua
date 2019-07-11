@@ -58,7 +58,7 @@ end
 local function reset_loop()
   softcut.buffer_clear(1)
   params:set("loop_start", 0)
-  params:set("loop_end", 60)
+  params:set("loop_end", 350.0)
   softcut.position(1, 0)
   current_position = 0
 end
@@ -72,7 +72,7 @@ end
 
 
 local function set_loop_end(v)
-  v = util.clamp(v, params:get("loop_start") + .01, 60.0)
+  v = util.clamp(v, params:get("loop_start") + .01, 350.0)
   params:set("loop_end", v)
   softcut.loop_end(1, v)
 end
@@ -109,8 +109,8 @@ function init()
   softcut.play(1, 1)
   softcut.rate(1, 1)
   softcut.rate_slew_time(1,0.1)
-  softcut.loop_start(1, 1)
-  softcut.loop_end(1, 60)
+  softcut.loop_start(1, 0)
+  softcut.loop_end(1, 350)
   softcut.loop(1, 1)
   softcut.fade_time(1, 0.1)
   softcut.rec(1, 0)
@@ -125,7 +125,7 @@ function init()
   params:add_control("loop_start", "loop start", controlspec.new(0.0, 349.99, "lin", .01, 0, "secs"))
   params:set_action("loop_start", function(x) set_loop_start(x) end)
   -- sample end controls
-  params:add_control("loop_end", "loop end", controlspec.new(.01, 350, "lin", .01, 60, "secs"))
+  params:add_control("loop_end", "loop end", controlspec.new(.01, 350, "lin", .01, 350, "secs"))
   params:set_action("loop_end", function(x) set_loop_end(x) end)
 
   -- screen metro
