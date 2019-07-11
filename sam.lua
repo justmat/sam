@@ -81,7 +81,7 @@ function write_buffer()
   sample_id = string.format("%04d", read_sample_number() + 1)
   local loop_start = params:get("loop_start")
   local loop_end = params:get("loop_end")
-  local file_path = "/home/we/dust/audio/tape/smpl." .. sample_id .. ".wav"
+  local file_path = "/home/we/dust/audio/tape/sam." .. sample_id .. ".wav"
   current_sample_number = sample_id
   softcut.buffer_write_mono(file_path, loop_start, loop_end, 1)
   
