@@ -125,7 +125,7 @@ function init()
   params:add_control("loop_start", "loop start", controlspec.new(0.0, 349.99, "lin", .01, 0, "secs"))
   params:set_action("loop_start", function(x) set_loop_start(x) end)
   -- sample end controls
-  params:add_control("loop_end", "loop end", controlspec.new(.01, 350, "lin", .01, 350, "secs"))
+  params:add_control("loop_end", "loop end", controlspec.new(.01, 350, "lin", .01, 2, "secs"))
   params:set_action("loop_end", function(x) set_loop_end(x) end)
 
   -- screen metro
