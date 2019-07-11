@@ -37,9 +37,12 @@ local current_sample_number = 0
 local function read_sample_number()
   -- reads sam/data/sample.number
   local sample = io.open("/home/we/dust/code/sam/data/sample.number", "r")
-  io.input(sample)
-  current_sample_number = tonumber(io.read()) 
-  io.close(sample)
+  if sample then
+    io.input(sample)
+    current_sample_number = tonumber(io.read())
+    io.close(sample)
+  end
+
   return current_sample_number
 end
 
@@ -84,7 +87,7 @@ function write_buffer()
   local file_path = "/home/we/dust/audio/tape/sam." .. sample_id .. ".wav"
   current_sample_number = sample_id
   softcut.buffer_write_mono(file_path, loop_start, loop_end, 1)
-  
+
   write_sample_number()
 end
 
@@ -118,7 +121,7 @@ function init()
   softcut.buffer(1,1)
   softcut.enable(1, 1)
   softcut.filter_dry(1, 1)
-  
+
   -- sample start controls
   params:add_control("loop_start", "loop start", controlspec.new(0.0, 59.99, "lin", .01, 0, "secs"))
   params:set_action("loop_start", function(x) set_loop_start(x) end)
@@ -143,7 +146,7 @@ function key(n, z)
   if n == 1 then
     alt = z == 1 and true or false
   end
-  
+
   if n == 2 and z == 1 then
     if recording == false then
       reset_loop()
@@ -173,7 +176,7 @@ function key(n, z)
     end
   end
 end
-      
+
 
 function enc(n, d)
   if alt then
@@ -220,4 +223,3 @@ function redraw()
   screen.text_center("saving sam." .. sample_id .. ".wav")
   screen.update()
 end
-    
