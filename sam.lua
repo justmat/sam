@@ -201,7 +201,7 @@ function redraw()
   screen.font_size(12)
   screen.aa(0)
   screen.clear()
-  screen.move(64, 10)
+  screen.move(64, 12)
   screen.level(4)
   if recording then
     screen.text_center("recording...")
