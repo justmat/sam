@@ -9,4 +9,4 @@ record a sound, adjust the start and end points, save selection to tape.
 * enc3 = adjust end point
 ---
 * alt + key3 = save selection to ``/home/we/dust/audio/tape``
-* alt + enc2/3 = fine adjust
+* alt + enc2/3 = coarse adjust start/end points
