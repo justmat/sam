@@ -58,7 +58,7 @@ end
 local function reset_loop()
   softcut.buffer_clear(1)
   params:set("loop_start", 0)
-  params:set("loop_end", 350.0)
+  params:set("loop_end", 2.0)
   softcut.position(1, 0)
   current_position = 0
 end
@@ -75,6 +75,12 @@ local function set_loop_end(v)
   v = util.clamp(v, params:get("loop_start") + .01, 350.0)
   params:set("loop_end", v)
   softcut.loop_end(1, v)
+end
+
+
+local function load_sample(file)
+  reset_loop()
+  softcut.buffer_read_mono(file, 0, 0, 350 * 48000, 1, 1)
 end
 
 
@@ -106,11 +112,11 @@ function init()
   softcut.level_input_cut(1, 1, 1.0)
   softcut.level_input_cut(2, 1, 1.0)
   softcut.pan(1, 0.5)
-  softcut.play(1, 1)
+  softcut.play(1, 0)
   softcut.rate(1, 1)
   softcut.rate_slew_time(1,0.1)
   softcut.loop_start(1, 0)
-  softcut.loop_end(1, 350)
+  softcut.loop_end(1, 2)
   softcut.loop(1, 1)
   softcut.fade_time(1, 0.1)
   softcut.rec(1, 0)
@@ -121,6 +127,9 @@ function init()
   softcut.enable(1, 1)
   softcut.filter_dry(1, 1)
 
+  -- load a sample
+  params:add_file("sample", "sample")
+  params:set_action("sample", function(file) load_sample(file) end)
   -- sample start controls
   params:add_control("loop_start", "loop start", controlspec.new(0.0, 349.99, "lin", .01, 0, "secs"))
   params:set_action("loop_start", function(x) set_loop_start(x) end)
@@ -181,9 +190,9 @@ function enc(n, d)
   if alt then
     -- coarse
     if n == 2 then
-      params:delta("loop_start", d * .1)
+      params:delta("loop_start", d * .5)
     elseif n == 3 then
-      params:delta("loop_end", d * .1)
+      params:delta("loop_end", d * .5)
     end
   else
     -- fine
