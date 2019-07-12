@@ -179,18 +179,18 @@ end
 
 function enc(n, d)
   if alt then
-    -- fine
-    if n == 2 then
-      params:delta("loop_start", d * .01)
-    elseif n == 3 then
-      params:delta("loop_end", d * .01)
-    end
-  else
     -- coarse
     if n == 2 then
-      params:delta("loop_start", d)
+      params:delta("loop_start", d * .1)
     elseif n == 3 then
-      params:delta("loop_end", d)
+      params:delta("loop_end", d * .1)
+    end
+  else
+    -- fine
+    if n == 2 then
+      params:delta("loop_start", d * .005)
+    elseif n == 3 then
+      params:delta("loop_end", d * .005)
     end
   end
 end
