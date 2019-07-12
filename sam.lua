@@ -197,19 +197,21 @@ end
 
 
 function redraw()
-  screen.aa(1)
+  screen.font_face(18)
+  screen.font_size(12)
+  screen.aa(0)
   screen.clear()
   screen.move(64, 10)
-  screen.level(6)
+  screen.level(4)
   if recording then
-    screen.text_center("recording")
+    screen.text_center("recording...")
   elseif playing then
     screen.text_center("looping")
   elseif not playing and not recording then
     screen.text_center("stopped")
   end
   screen.level(15)
-  screen.move(64, 32)
+  screen.move(64, 30)
   screen.text_center("start : " .. string.format("%.2f", params:get("loop_start")))
   screen.move(64, 42)
   if recording then
@@ -217,9 +219,10 @@ function redraw()
   else
     screen.text_center("end : " .. string.format("%.2f", params:get("loop_end")))
   end
-  screen.move(64, 52)
+  screen.move(64, 60)
+  screen.level(4)
   if util.time() - save_time <= 1.0 then
-    screen.text_center("saving sam" .. current_sample_number .. ".wav")
+    screen.text_center("saving " .. current_sample_number .. ".wav")
   end
   screen.update()
 end
