@@ -57,6 +57,7 @@ end
 
 local function reset_loop()
   softcut.buffer_clear(1)
+  params:set("sample", "-")
   params:set("loop_start", 0)
   params:set("loop_end", 2.0)
   softcut.position(1, 0)
@@ -79,7 +80,7 @@ end
 
 
 local function load_sample(file)
-  reset_loop()
+  softcut.buffer_clear(1)
   softcut.buffer_read_mono(file, 0, 0, 350 * 48000, 1, 1)
 end
 
