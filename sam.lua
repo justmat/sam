@@ -81,7 +81,7 @@ end
 
 local function load_sample(file)
   softcut.buffer_clear(1)
-  softcut.buffer_read_mono(file, 0, 0, 350 * 48000, 1, 1)
+  softcut.buffer_read_mono(file, 0, 0, -1, 1, 1)
 end
 
 
