@@ -100,6 +100,7 @@ end
 
 local function update_positions(voice,position)
   current_position = position
+  print(current_position)
 end
 
 
@@ -117,7 +118,7 @@ function init()
   softcut.rate(1, 1)
   softcut.rate_slew_time(1,0.1)
   softcut.loop_start(1, 0)
-  softcut.loop_end(1, 2)
+  softcut.loop_end(1, 350)
   softcut.loop(1, 1)
   softcut.fade_time(1, 0.1)
   softcut.rec(1, 0)
@@ -163,9 +164,9 @@ function key(n, z)
       recording = true
       start_time = util.time()
     else
+      params:set("loop_end", current_position)
       softcut.rec(1,0)
       softcut.position(1, 0)
-      params:set("loop_end", current_position)
       recording = false
       playing = true
     end
