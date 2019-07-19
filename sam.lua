@@ -100,6 +100,7 @@ end
 
 local function update_positions(voice,position)
   current_position = position
+  print(current_position)
 end
 
 
