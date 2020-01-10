@@ -68,14 +68,12 @@ end
 local function set_loop_start(v)
   v = util.clamp(v, 0, params:get("loop_end") - .01)
   params:set("loop_start", v)
-  softcut.loop_start(1, v)
 end
 
 
 local function set_loop_end(v)
   v = util.clamp(v, params:get("loop_start") + .01, 350.0)
   params:set("loop_end", v)
-  softcut.loop_end(1, v)
 end
 
 
