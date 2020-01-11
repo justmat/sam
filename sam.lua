@@ -21,7 +21,7 @@
 -- enc3 - sample end
 -- alt + enc2/3 - fine adjust
 --
--- v0.1 @justmat
+-- v1 @justmat
 
 local alt = false
 local recording = false
