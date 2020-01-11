@@ -68,14 +68,12 @@ end
 local function set_loop_start(v)
   v = util.clamp(v, 0, params:get("loop_end") - .01)
   params:set("loop_start", v)
-  --softcut.loop_start(1, v)
 end
 
 
 local function set_loop_end(v)
   v = util.clamp(v, params:get("loop_start") + .01, 350.0)
   params:set("loop_end", v)
-  --softcut.loop_end(1, v)
 end
 
 
@@ -83,13 +81,7 @@ local function load_sample(file)
   local chan, samples, rate = audio.file_info(file)
   local sample_len = samples / rate
   softcut.buffer_clear(1)
-  if chan == 1 then
-    softcut.buffer_read_mono(file, 0, 0, -1, 1, 1)
-    params:set("input", 1)
-  else
-    softcut.buffer_read_stereo(file, 0, 0, -1)
-    params:set("input", 2)
-  end
+  softcut.buffer_read_mono(file, 0, 0, -1, 1, 1)
   set_loop_start(0)
   set_loop_end(sample_len)
 end
@@ -102,11 +94,7 @@ function write_buffer()
   local loop_end = params:get("loop_end")
   local file_path = "/home/we/dust/audio/tape/sam" .. sample_id .. ".wav"
   current_sample_number = sample_id
-  if params:get("input") == 1 then
-    softcut.buffer_write_mono(file_path, loop_start, loop_end + .12, 1)
-  else
-    softcut.buffer_write_stereo(file_path, loop_start, loop_end + .12)
-  end
+  softcut.buffer_write_mono(file_path, loop_start, loop_end + .12, 1)
 
   write_sample_number()
 end
@@ -117,33 +105,6 @@ local function update_positions(voice,position)
 end
 
 
-function in_stereo()
-  -- set softcut to stereo inputs
-  softcut.level_input_cut(1, 1, 1)
-  softcut.level_input_cut(2, 1, 0)
-  softcut.level_input_cut(1, 2, 0)
-  softcut.level_input_cut(2, 2, 1)
-end
-
-
-function in_mono()
-  --set softcut to mono input
-  softcut.level_input_cut(1, 1, 1)
-  softcut.level_input_cut(2, 1, 0)
-  softcut.level_input_cut(1, 2, 1)
-  softcut.level_input_cut(2, 2, 0)
-end
-
-
-function set_input(n)
-  if n == 1 then
-    in_stereo()
-  else
-    in_mono()
-  end
-end
-
-
 function init()
   -- softcut setup
   audio.level_cut(1)
@@ -151,6 +112,8 @@ function init()
   audio.level_eng_cut(1)
   softcut.level(1,1)
   softcut.level_slew_time(1,0.1)
+  softcut.level_input_cut(1, 1, 1.0)
+  softcut.level_input_cut(2, 1, 1.0)
   softcut.pan(1, 0.5)
   softcut.play(1, 0)
   softcut.rate(1, 1)
@@ -166,9 +129,7 @@ function init()
   softcut.buffer(1,1)
   softcut.enable(1, 1)
   softcut.filter_dry(1, 1)
-  -- mono/stereo
-  params:add_option("input", "input", {"mono (L)", "stereo"}, 2)
-  params:set_action("input", function(v) set_input(v) end)
+
   -- load a sample
   params:add_file("sample", "sample")
   params:set_action("sample", function(file) load_sample(file) end)
