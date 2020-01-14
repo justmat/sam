@@ -67,13 +67,13 @@ end
 
 local function set_loop_start(v)
   v = util.clamp(v, 0, params:get("loop_end") - .01)
-  params:set("loop_start", v)
+  softcut.loop_start(1, v)
 end
 
 
 local function set_loop_end(v)
   v = util.clamp(v, params:get("loop_start") + .01, 350.0)
-  params:set("loop_end", v)
+  softcut.loop_end(1, v)
 end
 
 
@@ -102,6 +102,7 @@ end
 
 local function update_positions(voice,position)
   current_position = position
+  print(current_position)
 end
 
 
@@ -170,6 +171,7 @@ function key(n, z)
       softcut.position(1, 0)
       recording = false
       playing = true
+      softcut.play(1, 1)
     end
   elseif n == 3 and z == 1 then
     if alt then
