@@ -217,7 +217,7 @@ function redraw()
   if recording then
     screen.text_center("recording...")
   elseif playing then
-    screen.text_center("looping")
+    screen.text_center("looping " .. "(" .. string.format("%.2f", current_position) .. ")")
   elseif not playing and not recording then
     screen.text_center("stopped")
   end
@@ -229,6 +229,25 @@ function redraw()
     screen.text_center("end : " .. string.format("%.2f", current_position))
   else
     screen.text_center("end : " .. string.format("%.2f", params:get("loop_end")))
+  end
+  
+  screen.move(7, 60)  
+  if recording then
+    screen.text("loop")
+  else
+    screen.text("rec")
+  end
+  screen.move(120, 60)
+  if alt then
+    screen.text_right("save")
+  else
+    if recording then
+      screen.text_right(" - ")
+    elseif playing then
+      screen.text_right("stop")
+    else
+      screen.text_right("start")
+    end
   end
   screen.move(64, 60)
   screen.level(4)
