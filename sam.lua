@@ -159,18 +159,22 @@ function key(n, z)
   end
 
   if n == 2 and z == 1 then
-    if recording == false then
-      reset_loop()
-      softcut.rec(1, 1)
-      recording = true
-      start_time = util.time()
+    if alt then
+      -- do nothing
     else
-      params:set("loop_end", current_position)
-      softcut.rec(1,0)
-      softcut.position(1, 0)
-      recording = false
-      playing = true
-      softcut.play(1, 1)
+      if recording == false then
+        reset_loop()
+        softcut.rec(1, 1)
+        recording = true
+        start_time = util.time()
+      else
+        params:set("loop_end", current_position)
+        softcut.rec(1,0)
+        softcut.position(1, 0)
+        recording = false
+        playing = true
+        softcut.play(1, 1)
+      end
     end
   elseif n == 3 and z == 1 then
     if alt then
@@ -238,7 +242,11 @@ function redraw()
   if recording then
     screen.text("loop")
   else
-    screen.text("rec")
+    if alt then
+      screen.text(" - ")
+    else
+      screen.text("rec")
+    end
   end
   screen.move(120, 60)
   if alt then
