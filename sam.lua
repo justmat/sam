@@ -177,13 +177,17 @@ function key(n, z)
       save_time = util.time()
       write_buffer()
     else
-      if playing == true then
-        softcut.play(1, 0)
-        playing = false
+      if recording then
+        -- do nothing
       else
-        softcut.position(1, 0)
-        softcut.play(1, 1)
-        playing = true
+        if playing == true then
+          softcut.play(1, 0)
+          playing = false
+        else
+          softcut.position(1, 0)
+          softcut.play(1, 1)
+          playing = true
+        end
       end
     end
   end
@@ -230,7 +234,6 @@ function redraw()
   else
     screen.text_center("end : " .. string.format("%.2f", params:get("loop_end")))
   end
-  
   screen.move(7, 60)  
   if recording then
     screen.text("loop")
