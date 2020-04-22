@@ -160,7 +160,6 @@ function key(n, z)
     if alt then
       te.enter(write_buffer, 'sam', 'Save Sample As: ')
       alt = not alt
-      saved_time = util.time()
     else
       if recording then
         -- do nothing
