@@ -1,4 +1,4 @@
-# sam v1.1
+# sam v1.2
 
 record a sound, adjust the start and end points, save selection to tape.
 

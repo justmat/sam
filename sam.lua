@@ -21,7 +21,7 @@
 -- enc3 - sample end
 -- alt + enc2/3 - fine adjust
 --
--- v1.1 @justmat
+-- v1.2 @justmat
 
 local te = require 'textentry'
 local alt = false
