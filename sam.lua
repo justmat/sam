@@ -23,36 +23,13 @@
 --
 -- v1.1 @justmat
 
+local te = require 'textentry'
 local alt = false
 local recording = false
 local playing = false
 local save_time = 2
 local start_time = nil
 local current_position = 0
-
-local current_sample_number = 0
-
-
-local function read_sample_number()
-  -- reads sam/data/sample.number
-  local sample = io.open("/home/we/dust/code/sam/data/sample.number", "r")
-  if sample then
-    io.input(sample)
-    current_sample_number = tonumber(io.read())
-    io.close(sample)
-  end
-
-  return current_sample_number
-end
-
-
-local function write_sample_number()
-  -- writes current_sample_number to /sam/data/sample.number
-  local sample = io.open("/home/we/dust/code/sam/data/sample.number", "w+")
-  io.output(sample)
-  io.write(current_sample_number)
-  io.close(sample)
-end
 
 
 local function reset_loop()
@@ -87,16 +64,16 @@ local function load_sample(file)
 end
 
 
-function write_buffer()
+function write_buffer(name)
   -- saves buffer as a mono file in /home/we/dust/audio/tape
-  local sample_id = string.format("%04d", read_sample_number() + 1)
-  local loop_start = params:get("loop_start")
-  local loop_end = params:get("loop_end")
-  local file_path = "/home/we/dust/audio/tape/sam" .. sample_id .. ".wav"
-  current_sample_number = sample_id
-  softcut.buffer_write_mono(file_path, loop_start, loop_end + .12, 1)
+  if name then
+    local file_path = "/home/we/dust/audio/tape/" .. name .. ".wav"
+    local loop_start = params:get("loop_start")
+    local loop_end = params:get("loop_end")
 
-  write_sample_number()
+    softcut.buffer_write_mono(file_path, loop_start, loop_end + .12, 1)
+    print("Buffer saved as " .. file_path)
+  end
 end
 
 
@@ -178,8 +155,8 @@ function key(n, z)
     end
   elseif n == 3 and z == 1 then
     if alt then
-      save_time = util.time()
-      write_buffer()
+      te.enter(write_buffer, 'sam', 'Save Sample As: ')
+      alt = not alt
     else
       if recording then
         -- do nothing
@@ -262,8 +239,5 @@ function redraw()
   end
   screen.move(64, 60)
   screen.level(4)
-  if util.time() - save_time <= 1.0 then
-    screen.text_center("saving " .. current_sample_number .. ".wav")
-  end
   screen.update()
 end
