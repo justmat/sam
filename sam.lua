@@ -27,9 +27,10 @@ local te = require 'textentry'
 local alt = false
 local recording = false
 local playing = false
-local save_time = 2
+local saved_time = 2.0
 local start_time = nil
 local current_position = 0
+local last_saved_name = ''
 
 
 local function reset_loop()
@@ -67,12 +68,14 @@ end
 function write_buffer(name)
   -- saves buffer as a mono file in /home/we/dust/audio/tape
   if name then
+    last_saved_name = name
     local file_path = "/home/we/dust/audio/tape/" .. name .. ".wav"
     local loop_start = params:get("loop_start")
     local loop_end = params:get("loop_end")
 
     softcut.buffer_write_mono(file_path, loop_start, loop_end + .12, 1)
     print("Buffer saved as " .. file_path)
+    saved_time = util.time()
   end
 end
 
@@ -157,6 +160,7 @@ function key(n, z)
     if alt then
       te.enter(write_buffer, 'sam', 'Save Sample As: ')
       alt = not alt
+      saved_time = util.time()
     else
       if recording then
         -- do nothing
@@ -237,7 +241,10 @@ function redraw()
       screen.text_right("start")
     end
   end
-  screen.move(64, 60)
+  screen.move(64, 54)
   screen.level(4)
+  if util.time() - saved_time <= 1.0 then
+    screen.text_center("saved " .. last_saved_name .. ".wav")
+  end
   screen.update()
 end
