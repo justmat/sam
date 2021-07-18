@@ -65,6 +65,16 @@ local function load_sample(file)
 end
 
 
+function increment_name(name)
+  local n = name:find("-%d")
+  if n then
+    return name:sub(1, n) .. tonumber(name:sub(n + 1)) + 1
+  else
+    return ''
+  end
+end
+
+
 function write_buffer(name)
   -- saves buffer as a mono file in /home/we/dust/audio/tape
   if name then
@@ -158,7 +168,7 @@ function key(n, z)
     end
   elseif n == 3 and z == 1 then
     if alt then
-      te.enter(write_buffer, 'sam', 'Save Sample As: ')
+      te.enter(write_buffer, increment_name(last_saved_name), 'Save Sample As: ')
       alt = not alt
     else
       if recording then
