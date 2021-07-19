@@ -66,7 +66,7 @@ end
 
 
 function increment_name(name)
-  local n = name:find("-%d")
+  local n = name:find("%-%d+$")
   if n then
     return name:sub(1, n) .. tonumber(name:sub(n + 1)) + 1
   else
