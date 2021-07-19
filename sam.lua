@@ -70,7 +70,6 @@ local function quantize_loop_len()
     params:set("loop_end", loop_start + (q_beat_len * q_beat_count))
     quantized_time = util.time()
   else
-    print("loop too short for quantization settings")
     quantized_err_time = util.time()
   end
 end
