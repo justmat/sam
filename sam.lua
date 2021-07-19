@@ -28,6 +28,8 @@ local alt = false
 local recording = false
 local playing = false
 local saved_time = 2.0
+local quantized_time = 2.0
+local quantized_err_time = 2.0
 local start_time = nil
 local current_position = 0
 local last_saved_name = ''
@@ -54,6 +56,24 @@ local function set_loop_end(v)
   softcut.loop_end(1, v)
 end
 
+local function quantize_loop_len()
+  local loop_start = params:get("loop_start")
+  local loop_len = params:get("loop_end") - loop_start
+  local q_beat_len = clock.get_beat_sec() * params:get("quantize_div")
+  local q_beat_count = loop_len // q_beat_len
+  
+  if math.abs(loop_len - (q_beat_len * q_beat_count)) > math.abs(loop_len - (q_beat_len * (q_beat_count + 1) )) then
+    q_beat_count = q_beat_count + 1
+  end
+
+  if q_beat_count~=0 then
+    params:set("loop_end", loop_start + (q_beat_len * q_beat_count))
+    quantized_time = util.time()
+  else
+    print("loop too short for quantization settings")
+    quantized_err_time = util.time()
+  end
+end
 
 local function load_sample(file)
   local chan, samples, rate = audio.file_info(file)
@@ -119,6 +139,8 @@ function init()
   -- sample end controls
   params:add_control("loop_end", "loop end", controlspec.new(.01, 350, "lin", .01, 350, "secs"))
   params:set_action("loop_end", function(x) set_loop_end(x) end)
+  -- quantize (todo: make this visiion more readable/standardized?)
+  params:add_number("quantize_div", "Q beats", 1, 32, 1)
 
   -- screen metro
   local screen_timer = metro.init()
@@ -140,7 +162,8 @@ function key(n, z)
 
   if n == 2 and z == 1 then
     if alt then
-      -- do nothing
+      -- quantize!
+      quantize_loop_len()
     else
       if recording == false then
         reset_loop()
@@ -223,7 +246,7 @@ function redraw()
     screen.text("loop")
   else
     if alt then
-      screen.text(" - ")
+      screen.text("Q " .. params:get("clock_tempo") .. "/" .. params:get("quantize_div"))
     else
       screen.text("rec")
     end
@@ -244,6 +267,10 @@ function redraw()
   screen.level(4)
   if util.time() - saved_time <= 1.0 then
     screen.text_center("saved " .. last_saved_name .. ".wav")
+  elseif util.time() - quantized_time <= 1.0 then
+    screen.text_center("quantized!")
+  elseif util.time() - quantized_err_time <= 1.0 then
+    screen.text_center("loop too short :%(")
   end
   screen.update()
 end
