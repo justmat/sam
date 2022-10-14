@@ -72,8 +72,9 @@ function write_buffer(name)
     local file_path = "/home/we/dust/audio/tape/" .. name .. ".wav"
     local loop_start = params:get("loop_start")
     local loop_end = params:get("loop_end")
+    local dur = loop_end - loop_start
 
-    softcut.buffer_write_mono(file_path, loop_start, loop_end + .12, 1)
+    softcut.buffer_write_mono(file_path, loop_start, dur + .12, 1)
     print("Buffer saved as " .. file_path)
     saved_time = util.time()
   end
